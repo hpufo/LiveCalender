@@ -6,17 +6,19 @@ export default class CalenderWeek extends React.Component{
   renderDays(){
     let date = this.props.startDate;
     let thisMonth;
-    let monthIndex = this.props.todayDate.monthIndex;
     let jsx = [];
 
     for(let i=0; i<7; i++){
       let year = this.props.todayDate.year;
+      let monthIndex = this.props.todayDate.monthIndex;
 
-      if(this.props.startDate > this.props.endDate){
+      if(this.props.startDate > this.props.endDate && !thisMonth){
         thisMonth = false;
+        monthIndex--;
         if(monthIndex == 0) year--;
         if(date > this.props.daysLastMonth){
           date = 1;
+          monthIndex++;
           thisMonth = true;
         }
       }
