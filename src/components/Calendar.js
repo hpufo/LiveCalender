@@ -25,16 +25,29 @@ export default class Calendar extends React.Component{
     //If this month is Jan then set the index of last month to be Dec
     let lastMonthIndex = monthIndex == 0 ? 11 : monthIndex-1;  //0-11
     //If firstDay of the month is equal to 0(Sunday), then set the first day of the Cal to be 1. If not subtract the index of the day(+1) from the days in last month.
-    let firstDayOfCal = firstDayOfMonth == 0 ? 1 : (daysInMonth[lastMonthIndex]-firstDayOfMonth+1); //1-31
+    const firstDayOfCal = firstDayOfMonth == 0 ? 1 : (daysInMonth[lastMonthIndex]-firstDayOfMonth+1); //1-31
     //If the 1st day of the month is saturday then set index to 6, is not subtract it from 6 then add one to find the date of the first saturday
-    let fisrtSat =  firstDayOfMonth == 6 ? 6 : (6-firstDayOfMonth) + 1;
+    const fisrtSat =  firstDayOfMonth == 6 ? 6 : (6-firstDayOfMonth) + 1;
     
     let weeks = [];
+    //Adding these extra vars for readabilty
+    let startDay = firstDayOfCal;
+    let endDay = fisrtSat;
+    let count = 0;
     //Loop for every saturday in the month
     for(let i=fisrtSat; i<=daysInMonth[monthIndex]; i=i+7){
-      //Will do the math for this later
-      weeks.push({startDay: firstDayOfCal, endDay: fisrtSat});
+      weeks.push({startDay: startDay, endDay: endDay});
+      if(count == 0 && startDay+7 > daysInMonth[lastMonthIndex])
+        startDay =  startDay+7 - daysInMonth[lastMonthIndex];
+      else
+        startDay += 7;
+      if(endDay+7 > daysInMonth[monthIndex])
+        endDay = endDay+7 - daysInMonth[monthIndex];
+      else
+        endDay += 7;
+      count++;
     }
+    console.log(weeks);
     this.setState({
       todayDate: {
         monthIndex: monthIndex,
@@ -65,8 +78,8 @@ export default class Calendar extends React.Component{
       </thead>
       <tbody>
         <CalenderWeek 
-          startDate={this.state.weeks[0].startDay} 
-          endDate={this.state.weeks[0].endDay} 
+          startDate={this.state.weeks[this.state.weeks.length-1].startDay} 
+          endDate={this.state.weeks[this.state.weeks.length-1].endDay} 
           daysLastMonth={this.state.daysLastMonth} 
           daysThisMonth={this.state.daysThisMonth}
           todayDate={this.state.todayDate}
