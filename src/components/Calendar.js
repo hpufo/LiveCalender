@@ -1,4 +1,5 @@
 import React from "react";
+import CalenderWeek from './CalenderWeek';
 
 const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
@@ -22,9 +23,9 @@ export default class Calendar extends React.Component{
     const daysInMonth = [31,28+this.leapYear(year),31,30,31,30,31,31,30,31,30,31];
     let firstDayOfMonth = new Date(year,monthIndex,1).getDay(); //Returns the day as a number 0-6
     //If this month is Jan then set the index of last month to be Dec
-    let lastMonth = monthIndex == 0 ? 11 : monthIndex-1;  //0-11
+    let lastMonthIndex = monthIndex == 0 ? 11 : monthIndex-1;  //0-11
     //If firstDay of the month is equal to 0(Sunday), then set the first day of the Cal to be 1. If not subtract the index of the day(+1) from the days in last month.
-    let firstDayOfCal = firstDayOfMonth == 0 ? 1 : (daysInMonth[lastMonth]-firstDayOfMonth+1); //1-31
+    let firstDayOfCal = firstDayOfMonth == 0 ? 1 : (daysInMonth[lastMonthIndex]-firstDayOfMonth+1); //1-31
     //If the 1st day of the month is saturday then set index to 6, is not subtract it from 6 then add one to find the date of the first saturday
     let fisrtSat =  firstDayOfMonth == 6 ? 6 : (6-firstDayOfMonth) + 1;
     
@@ -39,7 +40,8 @@ export default class Calendar extends React.Component{
         monthIndex: monthIndex,
         year: year
       },
-      daysInLastMonth: daysInMonth[lastMonth],
+      daysLastMonth: daysInMonth[lastMonthIndex],
+      daysThisMonth: daysInMonth[monthIndex],
       weeks: weeks
     });
   }
@@ -54,7 +56,7 @@ export default class Calendar extends React.Component{
     })
   }
   render(){
-    console.log(this.state)
+    console.log(this.state.weeks);
     return (
     <table>
       <thead>
@@ -63,7 +65,13 @@ export default class Calendar extends React.Component{
       </tr>
       </thead>
       <tbody>
-        
+        <CalenderWeek 
+          startDate={this.state.weeks[0].startDay} 
+          endDate={this.state.weeks[0].endDay} 
+          daysLastMonth={this.state.daysLastMonth} 
+          daysThisMonth={this.state.daysThisMonth}
+          todayDate={this.state.todayDate}
+        />
       </tbody>
     </table>);
   }

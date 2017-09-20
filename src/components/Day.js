@@ -10,15 +10,30 @@ export default class Day extends React.Component{
     };
   }
   componentWillMount(){
-    console.log(window.apiResponse);
+    let thisDayDate = new Date(this.props.year,this.props.monthIndex,this.props.date);
+
+    for(let item of window.apiResponse.items){
+      for(let occurance of item.occurrences){
+         let startDate = new Date();
+      }
+      /*
+      event = {
+        name: item.name,
+
+     };//*/
+   }
   }
   render(){
-    return (<td>
-      {this.props.date}
+    const dateClass = this.props.thisMonth ? "dateCell":"notInMonth";
+    return (<td className={dateClass}>
+      <label className="date">{this.props.date}</label>
     </td>);
   }
 }
 
 Day.propTypes = {
-  date: PropTypes.any,
+  date: PropTypes.number,
+  thisMonth: PropTypes.bool,
+  monthIndex: PropTypes.number,
+  year: PropTypes.number
 };
