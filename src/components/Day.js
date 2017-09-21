@@ -29,7 +29,7 @@ export default class Day extends React.Component{
      events: events
    })
   }
-  //Sort by startDate by using an insertionSort
+  //Sort by startDate by using an insertionSort I am assuming the dataset is small
   sortByStartTime(events){
     let temp;
 
@@ -45,10 +45,9 @@ export default class Day extends React.Component{
   }
   //If date1 is smaller than date2
   compareDates(date1, date2){
-    //Check the year, month, day first.
+    //Check the year, month, day first. Then hours, then mins
     if(date1.getYear() < date2.getYear() || date1.getMonth() < date2.getMonth() || date1.getDate() < date2.getDate())
       return true;
-    //then compare minutes
     if(date1.getUTCHours() < date2.getUTCHours())
       return true;
     if(date1.getMinutes() < date2.getMinutes())
@@ -72,7 +71,6 @@ export default class Day extends React.Component{
     });
   }
   render(){
-    //console.log(this.state.events)
     const dateClass = this.props.thisMonth ? "dateCell":"notInMonth";
     return (
     <td className={dateClass}>

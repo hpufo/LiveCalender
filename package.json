@@ -31,7 +31,6 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
-    "test": "jest",
-    "build": "babel src --out-dir=dist --copy-files"
+    "test": "jest"
   }
 }

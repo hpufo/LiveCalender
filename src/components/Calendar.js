@@ -64,7 +64,6 @@ export default class Calendar extends React.Component{
       }
     }
 
-    //console.log(weeks)
     this.setState({
       todayDate: {
         monthIndex: monthIndex,
