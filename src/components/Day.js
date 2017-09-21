@@ -12,7 +12,7 @@ export default class Day extends React.Component{
   componentWillMount(){
     let thisDate = new Date(this.props.year,this.props.monthIndex,this.props.date);
     thisDate.setHours(0,0,0);
-
+    console.log(thisDate);
     let events = [];
     for(let item of window.apiResponse.items){
       for(let occurance of item.occurrences){
