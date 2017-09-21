@@ -10,7 +10,7 @@ describe('a sun-mon calendar with events on each day', function() {
   });
 
   test('should render 4 weeks for the month feb/2015', function() {
-    let date = {year: 2015, month: 1, date: 1}
+    let date = {year: 2015, month: 2, date: 1}
     let wrapper = mount(<Calendar setDate={date}/>);
     expect(wrapper.find(".week").length).toBe(4);
   });
