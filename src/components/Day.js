@@ -70,7 +70,7 @@ export default class Day extends React.Component{
     });
   }
   render(){
-    console.log(this.state.events)
+    //console.log(this.state.events)
     const dateClass = this.props.thisMonth ? "dateCell":"notInMonth";
     return (
     <td className={dateClass}>

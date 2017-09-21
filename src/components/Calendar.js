@@ -80,6 +80,22 @@ export default class Calendar extends React.Component{
       return (<th key={i}>{day}</th>);
     })
   }
+  renderWeeks(){
+    return this.state.weeks.map((week,i) => {
+      return (
+        <CalenderWeek 
+          startDate={week.startDay} 
+          endDate={week.endDay}
+          containsLastMonth={week.containsLastMonth}
+          containsNextMonth={week.containsNextMonth}
+          daysLastMonth={this.state.daysLastMonth} 
+          daysThisMonth={this.state.daysThisMonth}
+          todayDate={this.state.todayDate}
+          key={i}
+        />
+      );
+    });
+  }
   render(){
 
     return (
@@ -90,15 +106,7 @@ export default class Calendar extends React.Component{
       </tr>
       </thead>
       <tbody>
-        <CalenderWeek 
-          startDate={this.state.weeks[this.state.weeks.length-1].startDay} 
-          endDate={this.state.weeks[this.state.weeks.length-1].endDay}
-          containsLastMonth={this.state.weeks[this.state.weeks.length-1].containsLastMonth}
-          containsNextMonth={this.state.weeks[this.state.weeks.length-1].containsNextMonth}
-          daysLastMonth={this.state.daysLastMonth} 
-          daysThisMonth={this.state.daysThisMonth}
-          todayDate={this.state.todayDate}
-        />
+        {this.renderWeeks()}
       </tbody>
     </table>);
   }
