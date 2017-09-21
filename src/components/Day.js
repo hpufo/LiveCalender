@@ -12,7 +12,8 @@ export default class Day extends React.Component{
   componentWillMount(){
     let thisDate = new Date(this.props.year,this.props.monthIndex,this.props.date);
     thisDate.setHours(0,0,0);
-    console.log(thisDate);
+    
+    //Loop through the json file and get the data I want then store it in the events array
     let events = [];
     for(let item of window.apiResponse.items){
       for(let occurance of item.occurrences){
@@ -20,14 +21,13 @@ export default class Day extends React.Component{
          let endDate = new Date(occurance.finish);
 
          if(this.inDateRange(thisDate,startDate,endDate)){
-           events.push({name: item.name, start: startDate, end: endDate});
+           events.push({name: item.name, start: startDate, end: endDate});  //I am assuming you can have the save event more than once a day
          }
       }
    }
+   //Sort then set the state
    this.sortByStartTime(events);
-   this.setState({
-     events: events
-   })
+   this.setState({events: events});
   }
   //Sort by startDate by using an insertionSort I am assuming the dataset is small
   sortByStartTime(events){
@@ -35,7 +35,9 @@ export default class Day extends React.Component{
 
     for(let i=1; i<events.length; i++){
       for(let j=i; j>0; j--){
+        //Comapares the stateDate going into the storted sub array
         if(this.compareDates(events[j].start, events[j-1].start)){
+          //swap
           temp = events[j-1];
           events[j-1] = events[j];
           events[j] = temp;
@@ -55,14 +57,16 @@ export default class Day extends React.Component{
 
     return false;
   }
+  //If today is in between the start and end date
   inDateRange(today,start,end){
+    //First comare the year, then month, then year
     if(start.getYear() > today.getYear() || end.getYear() < today.getYear())
       return false
     if(start.getMonth() > today.getMonth() || end.getMonth() < today.getMonth())
       return false;
     if(start.getDate() > today.getDate() || end.getDate() < today.getDate())
       return false;
-
+    //If we made it here then it must be true
     return true;
   }
   renderEvents(){
