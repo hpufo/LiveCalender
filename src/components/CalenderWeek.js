@@ -43,7 +43,7 @@ export default class CalenderWeek extends React.Component{
     return jsx;
   }
   render(){
-    return (<tr>{this.renderDays()}</tr>);
+    return (<tr className="week">{this.renderDays()}</tr>);
   }
 }
 

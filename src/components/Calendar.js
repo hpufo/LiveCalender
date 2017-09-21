@@ -17,6 +17,11 @@ export default class Calendar extends React.Component{
   }
   componentWillMount(){
     let today = new Date();
+    //For testing
+    if(this.props.setDate){
+      let date = this.props.setDate;
+      today = new Date(date.year,date.month-1,date.date);
+    }
     
     const monthIndex = today.getMonth();
     const year = today.getFullYear();
@@ -54,7 +59,7 @@ export default class Calendar extends React.Component{
         endDay += 7;
       count++;
       //Loop again if there is another sunday after the last sunday
-      if(i+7 > daysInMonth[monthIndex] && startDay < daysInMonth[monthIndex]){
+      if(i+7 > daysInMonth[monthIndex] && startDay <= daysInMonth[monthIndex]){
         i -= 7;
       }
     }

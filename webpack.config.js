@@ -7,7 +7,7 @@ module.exports = {
   devtool: debug ? "inline-sourcemap" : null,
   entry: "./app.js",
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules)/, 
