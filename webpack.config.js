@@ -13,7 +13,7 @@ module.exports = {
         exclude: /(node_modules)/, 
         loader: 'babel-loader',
         query: {
-          presets: [['es2015', { modules: false }], 'react', 'stage-0'],
+          presets: [['env', { modules: false }], 'react', 'stage-0'],
           plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
         }
       }
