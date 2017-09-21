@@ -1,9 +1,10 @@
 {
   "name": "calender",
   "version": "0.0.0",
-  "description": "",
+  "author": "Chris Stephenson",
+  "description": "Code challenge from Live",
   "repository": {
-    "url": "https://github.com/calendreco/frontend-takehome"
+    "url": "https://github.com/hpufo/LiveCalender"
   },
   "main": "webpack.config.js",
   "license": "MIT",
