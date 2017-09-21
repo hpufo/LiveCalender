@@ -49,7 +49,9 @@ export default class Day extends React.Component{
     if(date1.getYear() < date2.getYear() || date1.getMonth() < date2.getMonth() || date1.getDate() < date2.getDate())
       return true;
     //then compare minutes
-    if(date1.getMinutes() + date1.getHours()*60 < date2.getMinutes + date2.getHours()*60)
+    if(date1.getUTCHours() < date2.getUTCHours())
+      return true;
+    if(date1.getMinutes() < date2.getMinutes())
       return true;
 
     return false;

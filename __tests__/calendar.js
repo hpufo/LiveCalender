@@ -34,10 +34,16 @@ describe('a sun-mon calendar with events on each day', function() {
   });
 
   test('should render 1 event on 1/march/2016', function() {
-
+    let date = {year: 2017, month: 9, date: 1}
+    let wrapper = mount(<Calendar setDate={date}/>);
+    let daysOfMonth = wrapper.find(".dateCell");
+    console.log(daysOfMonth[0].length);
+    expect(daysOfMonth[0].find(".event").length).toBe(1);
   });
 
   test('should render 3 events on 13/march/2016 in start order', function() {
-
+    let date = {year: 2017, month: 9, date: 13}
+    let wrapper = mount(<Calendar setDate={date}/>);
+    expect(wrapper.find(".dateCell").length).toBe(31);
   });
 });
