@@ -39,25 +39,29 @@ export default class Calendar extends React.Component{
     //Adding these extra vars for readabilty
     let startDay = firstDayOfCal;
     let endDay = fisrtSat;
-    let count = 0;
+    //If the first day of the month isn't Sunday, then you can assume that this week will contain days from last month
     let containsLastMonth = firstDayOfMonth == 0 ? false:true;
     let containsNextMonth = false;
     //Loop for every saturday in the month
     for(let i=fisrtSat; i<=daysInMonth[monthIndex]; i+=7){
+      //First push the data into the weeks array
       weeks.push({startDay: startDay, endDay: endDay, containsLastMonth: containsLastMonth, containsNextMonth: containsNextMonth});
-      if(count == 0 && startDay+7 > daysInMonth[lastMonthIndex]){
-        startDay =  startDay+7 - daysInMonth[lastMonthIndex];
+
+      startDay += 7;
+      //If this is the first week and the startDay is now bigger than days in last month
+      if(i == fisrtSat && startDay > daysInMonth[lastMonthIndex]){
+        startDay =  startDay - daysInMonth[lastMonthIndex];
+        //From now the weeks won't contain days from last month
         containsLastMonth = false;
       }
-      else
-        startDay += 7;
-      if(endDay+7 > daysInMonth[monthIndex]){
-        endDay = endDay+7 - daysInMonth[monthIndex];
-        containsNextMonth = true;
+
+      endDay += 7
+      //If this is the last saturday
+      if(endDay > daysInMonth[monthIndex]){
+        endDay = endDay - daysInMonth[monthIndex];
+        containsNextMonth = true;                     //This week will contain days from next month
       }
-      else
-        endDay += 7;
-      count++;
+
       //Loop again if there is another sunday after the last sunday
       if(i+7 > daysInMonth[monthIndex] && startDay <= daysInMonth[monthIndex]){
         i -= 7;
@@ -101,17 +105,21 @@ export default class Calendar extends React.Component{
     });
   }
   render(){
-
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
     return (
-    <table>
-      <thead>
-      <tr className="daysOfWeek">
-        {this.renderDaysOfWeek()}
-      </tr>
-      </thead>
-      <tbody>
-        {this.renderWeeks()}
-      </tbody>
-    </table>);
+      <div>
+        <h1>{`${months[this.state.todayDate.monthIndex]}, ${this.state.todayDate.year}`}</h1>
+        <table>
+          <thead>
+          <tr className="daysOfWeek">
+            {this.renderDaysOfWeek()}
+          </tr>
+          </thead>
+          <tbody>
+            {this.renderWeeks()}
+          </tbody>
+        </table>
+      </div>
+    );
   }
 }
