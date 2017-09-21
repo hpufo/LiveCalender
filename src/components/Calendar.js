@@ -12,11 +12,12 @@ export default class Calendar extends React.Component{
         monthIndex: null,
         year: null
       },
-      weeks: [] //{startDay: n, endDay: n}
+      weeks: [] //{startDay: n, endDay: n, containsLastMonth: bool containsNextMonth: bool}
     }
   }
   componentWillMount(){
     let today = new Date();
+    
     const monthIndex = today.getMonth();
     const year = today.getFullYear();
 
@@ -25,29 +26,40 @@ export default class Calendar extends React.Component{
     //If this month is Jan then set the index of last month to be Dec
     let lastMonthIndex = monthIndex == 0 ? 11 : monthIndex-1;  //0-11
     //If firstDay of the month is equal to 0(Sunday), then set the first day of the Cal to be 1. If not subtract the index of the day(+1) from the days in last month.
-    const firstDayOfCal = firstDayOfMonth == 0 ? 1 : (daysInMonth[lastMonthIndex]-firstDayOfMonth+1); //1-31
+    let firstDayOfCal = firstDayOfMonth == 0 ? 1 : (daysInMonth[lastMonthIndex]-firstDayOfMonth+1); //1-31
     //If the 1st day of the month is saturday then set index to 6, is not subtract it from 6 then add one to find the date of the first saturday
-    const fisrtSat =  firstDayOfMonth == 6 ? 6 : (6-firstDayOfMonth) + 1;
+    let fisrtSat =  firstDayOfMonth == 6 ? 6 : (6-firstDayOfMonth) + 1;
     
     let weeks = [];
     //Adding these extra vars for readabilty
     let startDay = firstDayOfCal;
     let endDay = fisrtSat;
     let count = 0;
+    let containsLastMonth = firstDayOfMonth == 0 ? false:true;
+    let containsNextMonth = false;
     //Loop for every saturday in the month
-    for(let i=fisrtSat; i<=daysInMonth[monthIndex]; i=i+7){
-      weeks.push({startDay: startDay, endDay: endDay});
-      if(count == 0 && startDay+7 > daysInMonth[lastMonthIndex])
+    for(let i=fisrtSat; i<=daysInMonth[monthIndex]; i+=7){
+      weeks.push({startDay: startDay, endDay: endDay, containsLastMonth: containsLastMonth, containsNextMonth: containsNextMonth});
+      if(count == 0 && startDay+7 > daysInMonth[lastMonthIndex]){
         startDay =  startDay+7 - daysInMonth[lastMonthIndex];
+        containsLastMonth = false;
+      }
       else
         startDay += 7;
-      if(endDay+7 > daysInMonth[monthIndex])
+      if(endDay+7 > daysInMonth[monthIndex]){
         endDay = endDay+7 - daysInMonth[monthIndex];
+        containsNextMonth = true;
+      }
       else
         endDay += 7;
       count++;
+      //Loop again if there is another sunday after the last sunday
+      if(i+7 > daysInMonth[monthIndex] && startDay < daysInMonth[monthIndex]){
+        i -= 7;
+      }
     }
-    console.log(weeks);
+
+    //console.log(weeks)
     this.setState({
       todayDate: {
         monthIndex: monthIndex,
@@ -69,6 +81,7 @@ export default class Calendar extends React.Component{
     })
   }
   render(){
+
     return (
     <table>
       <thead>
@@ -79,7 +92,9 @@ export default class Calendar extends React.Component{
       <tbody>
         <CalenderWeek 
           startDate={this.state.weeks[this.state.weeks.length-1].startDay} 
-          endDate={this.state.weeks[this.state.weeks.length-1].endDay} 
+          endDate={this.state.weeks[this.state.weeks.length-1].endDay}
+          containsLastMonth={this.state.weeks[this.state.weeks.length-1].containsLastMonth}
+          containsNextMonth={this.state.weeks[this.state.weeks.length-1].containsNextMonth}
           daysLastMonth={this.state.daysLastMonth} 
           daysThisMonth={this.state.daysThisMonth}
           todayDate={this.state.todayDate}

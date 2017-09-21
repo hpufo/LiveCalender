@@ -12,7 +12,7 @@ export default class Day extends React.Component{
   componentWillMount(){
     let thisDate = new Date(this.props.year,this.props.monthIndex,this.props.date);
     thisDate.setHours(0,0,0);
-    console.log(thisDate);
+
     let events = [];
     for(let item of window.apiResponse.items){
       let times = [];
@@ -25,6 +25,7 @@ export default class Day extends React.Component{
          }
       }
 
+      //If there are events going on this day
       if(times.length > 0){
         event = {
           name: item.name,
@@ -37,6 +38,9 @@ export default class Day extends React.Component{
      events: events
    })
   }
+  sortByStartTime(){
+    
+  }
   inDateRange(today,start,end){
     if(start.getYear() > today.getYear() || end.getYear() < today.getYear())
       return false
@@ -48,6 +52,7 @@ export default class Day extends React.Component{
     return true;
   }
   render(){
+    console.log(this.state.events)
     const dateClass = this.props.thisMonth ? "dateCell":"notInMonth";
     return (<td className={dateClass}>
       <label className="date">{this.props.date}</label>
