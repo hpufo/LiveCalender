@@ -15,31 +15,44 @@ export default class Day extends React.Component{
 
     let events = [];
     for(let item of window.apiResponse.items){
-      let times = [];
       for(let occurance of item.occurrences){
          let startDate = new Date(occurance.start);
          let endDate = new Date(occurance.finish);
 
          if(this.inDateRange(thisDate,startDate,endDate)){
-           times.push({start: startDate, end: endDate});
+           events.push({name: item.name, start: startDate, end: endDate});
          }
       }
-
-      //If there are events going on this day
-      if(times.length > 0){
-        event = {
-          name: item.name,
-          time: times
-        };
-        events.push(event);
-      }
    }
+   this.sortByStartTime(events);
    this.setState({
      events: events
    })
   }
-  sortByStartTime(){
-    
+  //Sort by startDate by using an insertionSort
+  sortByStartTime(events){
+    let temp;
+
+    for(let i=1; i<events.length; i++){
+      for(let j=i; j>0; j--){
+        if(this.compareDates(events[j].start, events[j-1].start)){
+          temp = events[j-1];
+          events[j-1] = events[j];
+          events[j] = temp;
+        }
+      }
+    }
+  }
+  //If date1 is smaller than date2
+  compareDates(date1, date2){
+    //Check the year, month, day first.
+    if(date1.getYear() < date2.getYear() || date1.getMonth() < date2.getMonth() || date1.getDate() < date2.getDate())
+      return true;
+    //then compare minutes
+    if(date1.getMinutes() + date1.getHours()*60 < date2.getMinutes + date2.getHours()*60)
+      return true;
+
+    return false;
   }
   inDateRange(today,start,end){
     if(start.getYear() > today.getYear() || end.getYear() < today.getYear())
@@ -51,12 +64,20 @@ export default class Day extends React.Component{
 
     return true;
   }
+  renderEvents(){
+    return this.state.events.map((event,i) => {
+      return <p className="event" key={i}>{event.name}</p>;
+    });
+  }
   render(){
     console.log(this.state.events)
     const dateClass = this.props.thisMonth ? "dateCell":"notInMonth";
-    return (<td className={dateClass}>
+    return (
+    <td className={dateClass}>
       <label className="date">{this.props.date}</label>
-    </td>);
+      {this.renderEvents()}
+    </td>
+    );
   }
 }
 
