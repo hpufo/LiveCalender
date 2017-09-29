@@ -10,9 +10,9 @@ export default class Day extends React.Component{
     };
   }
   componentWillMount(){
-    let thisDate = new Date(this.props.year,this.props.monthIndex,this.props.date);
-    thisDate.setHours(0,0,0);
-    
+    let dayStart = new Date(this.props.year,this.props.monthIndex,this.props.date);
+    dayStart.setHours(0,0,0);
+    console.log(dayStart)
     //Loop through the json file and get the data I want then store it in the events array
     let events = [];
     for(let item of window.apiResponse.items){
@@ -20,7 +20,7 @@ export default class Day extends React.Component{
          let startDate = new Date(occurance.start);
          let endDate = new Date(occurance.finish);
 
-         if(this.inDateRange(thisDate,startDate,endDate)){
+         if(this.inDateRange(dayStart,startDate,endDate)){
            events.push({name: item.name, start: startDate, end: endDate});  //I am assuming you can have the save event more than once a day
          }
       }
@@ -36,7 +36,7 @@ export default class Day extends React.Component{
     for(let i=1; i<events.length; i++){
       for(let j=i; j>0; j--){
         //Comapares the stateDate going into the storted sub array
-        if(this.compareDates(events[j].start, events[j-1].start)){
+        if(events[j].start.getTime() < events[j-1].start.getTime()){
           //swap
           temp = events[j-1];
           events[j-1] = events[j];
@@ -45,26 +45,12 @@ export default class Day extends React.Component{
       }
     }
   }
-  //If date1 is smaller than date2
-  compareDates(date1, date2){
-    //Check the year, month, day first. Then hours, then mins
-    if(date1.getYear() < date2.getYear() || date1.getMonth() < date2.getMonth() || date1.getDate() < date2.getDate())
-      return true;
-    if(date1.getUTCHours() < date2.getUTCHours())
-      return true;
-    if(date1.getMinutes() < date2.getMinutes())
-      return true;
-
-    return false;
-  }
   //If today is in between the start and end date
-  inDateRange(today,start,end){
-    //First comare the year, then month, then year
-    if(start.getYear() > today.getYear() || end.getYear() < today.getYear())
-      return false
-    if(start.getMonth() > today.getMonth() || end.getMonth() < today.getMonth())
-      return false;
-    if(start.getDate() > today.getDate() || end.getDate() < today.getDate())
+  inDateRange(todayStart,start,end){
+    let todayEnd = new Date(todayStart);
+    todayEnd.setHours(23,59,59);
+    //If the event ends before the start of the day or starts after the end of the day
+    if(end.getTime() < todayStart.getTime() || start.getTime() > todayEnd.getTime())
       return false;
     //If we made it here then it must be true
     return true;
